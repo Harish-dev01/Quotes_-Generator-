@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import axios from 'axios'; // Import axios
+import './index.css'; // Import the Tailwind CSS file
 
 function App() {
+  const [gen, setGen] = useState('Please click the button to get advice');
+
+  const getAdvice = async () => {
+    try {
+      const response = await axios.get('https://api.adviceslip.com/advice'); 
+      setGen(response.data.slip.advice); // Update state with advice message
+    } catch (error) {
+      console.error('Error fetching advice:', error);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-orange-400">
+      <h3 className="text-lg md:text-xl font-semibold text-center text-white mb-4">
+        {gen}
+      </h3>
+      <button 
+        onClick={getAdvice} 
+        className="px-6 py-2 bg-orange-900 text-white font-semibold rounded-lg hover:bg-orange-800 transition duration-200"
+      >
+        Get a Piece Of Advice
+      </button>
     </div>
   );
 }
